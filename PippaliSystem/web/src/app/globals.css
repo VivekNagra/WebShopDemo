@@ -1,0 +1,64 @@
+@import "tailwindcss";
+
+:root {
+  --background: #f2f2f7;
+  /* Apple Light Gray */
+  --foreground: #1a1a1a;
+  --primary: #ffc32d;
+  --primary-foreground: #1a1a1a;
+  --surface: #ffffff;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-surface: var(--surface);
+  --font-sans: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande", "Lucida Sans", Arial, sans-serif;
+}
+
+body {
+  background: linear-gradient(135deg, #f2f2f7 0%, #e5e5ea 100%);
+  /* Subtle gradient */
+  color: var(--foreground);
+  font-family: var(--font-sans);
+  min-height: 100vh;
+}
+
+
+
+/* Custom Utility Classes for Brand */
+.btn-primary {
+  background: linear-gradient(135deg, #ffc32d 0%, #ffb300 100%);
+  /* Glossy gradient */
+  color: var(--primary-foreground);
+  font-weight: bold;
+  padding: 0.75rem 1.5rem;
+  border-radius: 9999px;
+  /* Pill shape */
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 15px rgba(255, 195, 45, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 8px 20px rgba(255, 195, 45, 0.4);
+  filter: brightness(1.05);
+}
+
+/* Clean Depth Utility */
+.card {
+  background-color: #ffffff;
+  border-radius: 1.5rem;
+  /* XL rounded corners */
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+  border: 1px solid rgba(0, 0, 0, 0.02);
+  transition: all 0.3s ease;
+}
+
+.card:hover {
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 10px 10px -5px rgba(0, 0, 0, 0.02);
+  transform: translateY(-4px);
+}

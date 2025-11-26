@@ -1,36 +1,53 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Pippali - Restaurant System
 
-## Getting Started
+Welcome to the Pippali codebase! This is the full stack system for our restaurant, including the website, admin panel, and POS system.
 
-First, run the development server:
+## Project Structure
+
+We have three main parts here:
+
+*   **`PippaliSystem/web`**: The main website and Admin Panel (Next.js).
+*   **`PippaliSystem/pos-app`**: The iPad POS app for our staff (React Native / Expo).
+*   **`PippaliSystem/backend`**: The API that powers everything (FastAPI + PostgreSQL).
+
+## How to Run Everything
+
+You'll need three terminal windows open to run the full system.
+
+### 1. The Backend (API)
+This needs to be running for anything else to work.
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+cd PippaliSystem/backend
+source venv/bin/activate
+uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 ```
+*   API Docs will be at: `http://localhost:8000/docs`
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 2. The Website & Admin Panel
+This is what customers see, and where we manage the menu.
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+```bash
+cd PippaliSystem/web
+npm run dev
+```
+*   Website: `http://localhost:3000`
+*   Admin Panel: `http://localhost:3000/admin`
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### 3. The POS App
+This is for the iPad in the restaurant.
 
-## Learn More
+```bash
+cd PippaliSystem/pos-app
+npx expo start
+```
+*   Scan the QR code with your phone or use an iOS Simulator.
 
-To learn more about Next.js, take a look at the following resources:
+## Key Features
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+*   **Menu Management**: Add items, categories, and options (like "Extra Rice" or "Spiciness") in the Admin Panel.
+*   **Dish Types**: We tag items as Chicken, Lamb, Veg, Soda, Lassi, etc. for better reporting.
+*   **Live Orders**: Orders from the POS are sent instantly to the kitchen (backend).
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Need Help?
+If you see a "Network Error", make sure the Backend is running! That's usually the culprit.
