@@ -42,7 +42,8 @@ export default function ContactPage() {
                             <div>
                                 <h3 className="font-bold text-gray-900">Phone</h3>
                                 <p className="text-gray-600">+45 44 42 99 99</p>
-                                <p className="text-sm text-gray-500 mt-1">Mon-Sun: 16:00 - 22:00</p>
+                                <p className="text-sm text-gray-500 mt-1">Mon-Thu: 16:00 - 22:00</p>
+                                <p className="text-sm text-gray-500">Fri-Sun: 12:00 - 22:00</p>
                             </div>
                         </div>
 

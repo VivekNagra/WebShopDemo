@@ -34,12 +34,7 @@ export default function Navbar() {
                             {link.name}
                         </Link>
                     ))}
-                    <Link
-                        href="/admin/menu"
-                        className="px-4 py-2 rounded-full bg-gray-100 text-gray-900 hover:bg-gray-200 transition-colors text-sm font-bold"
-                    >
-                        Admin
-                    </Link>
+
                 </div>
 
                 {/* Mobile Menu Button */}
@@ -65,14 +60,7 @@ export default function Navbar() {
                                 {link.name}
                             </Link>
                         ))}
-                        <div className="h-px bg-gray-100 my-2"></div>
-                        <Link
-                            href="/admin/menu"
-                            className="text-lg font-medium text-gray-500 hover:text-gray-900"
-                            onClick={() => setIsOpen(false)}
-                        >
-                            Admin Panel
-                        </Link>
+
                     </div>
                 </div>
             )}

@@ -125,7 +125,7 @@ export default function POSScreen() {
                 uniqueId,
                 selectedOptions: options,
                 quantity: 1,
-                finalPrice: finalPrice || item.base_price
+                finalPrice: parseFloat(finalPrice || item.base_price)
             }];
         });
     };
@@ -246,10 +246,26 @@ export default function POSScreen() {
     const isMobile = width < 768;
     const [orderModalVisible, setOrderModalVisible] = useState(false);
 
+    // Sidebar State
+    const [sidebarVisible, setSidebarVisible] = useState(false);
+
+    const handleAdminPress = () => {
+        setSidebarVisible(false);
+        Alert.alert(
+            "Admin Panel",
+            "To access the Admin Panel, please visit /admin on the web dashboard.",
+            [{ text: "OK" }]
+        );
+    };
+
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.header}>
+                <TouchableOpacity onPress={() => setSidebarVisible(true)} style={styles.menuButton}>
+                    <Text style={styles.menuButtonText}>☰</Text>
+                </TouchableOpacity>
                 <Text style={styles.headerText}>Pippali POS</Text>
+                <View style={{ width: 40 }} />
             </View>
 
             <View style={styles.content}>
@@ -297,6 +313,41 @@ export default function POSScreen() {
                     </View>
                 )}
             </View>
+
+            {/* Sidebar Modal */}
+            <Modal
+                animationType="fade"
+                transparent={true}
+                visible={sidebarVisible}
+                onRequestClose={() => setSidebarVisible(false)}
+            >
+                <TouchableOpacity
+                    style={styles.sidebarOverlay}
+                    activeOpacity={1}
+                    onPress={() => setSidebarVisible(false)}
+                >
+                    <View style={styles.sidebar}>
+                        <View style={styles.sidebarHeader}>
+                            <Text style={styles.sidebarTitle}>Menu</Text>
+                            <TouchableOpacity onPress={() => setSidebarVisible(false)}>
+                                <Text style={styles.closeBtn}>✕</Text>
+                            </TouchableOpacity>
+                        </View>
+
+                        <TouchableOpacity style={styles.sidebarItem} onPress={handleAdminPress}>
+                            <Text style={styles.sidebarItemText}>Admin Panel</Text>
+                        </TouchableOpacity>
+
+                        <TouchableOpacity style={styles.sidebarItem} onPress={() => setSidebarVisible(false)}>
+                            <Text style={styles.sidebarItemText}>Settings</Text>
+                        </TouchableOpacity>
+
+                        <TouchableOpacity style={styles.sidebarItem} onPress={() => setSidebarVisible(false)}>
+                            <Text style={styles.sidebarItemText}>Logout</Text>
+                        </TouchableOpacity>
+                    </View>
+                </TouchableOpacity>
+            </Modal>
 
             {isMobile && (
                 <Modal
@@ -405,6 +456,7 @@ export default function POSScreen() {
                                                     <Text style={[styles.optionBtnText, isSelected && styles.selectedOptionBtnText]}>
                                                         {option.name} {option.price_delta > 0 && `(+${option.price_delta} kr)`}
                                                     </Text>
+                                                    {isSelected && <Text style={{ color: '#000', fontWeight: 'bold' }}>✓</Text>}
                                                 </TouchableOpacity>
                                             );
                                         })}
@@ -415,7 +467,7 @@ export default function POSScreen() {
 
                         <TouchableOpacity style={styles.addToCartBtn} onPress={confirmAddToCart}>
                             <Text style={styles.addToCartBtnText}>
-                                Add to Order • {getCurrentModalTotal().toFixed(2)} kr.
+                                Add to Order • {Number(getCurrentModalTotal()).toFixed(2)} kr.
                             </Text>
                         </TouchableOpacity>
                     </View>
@@ -433,7 +485,9 @@ const styles = StyleSheet.create({
     header: {
         backgroundColor: '#1a1a1a',
         padding: 15,
+        flexDirection: 'row',
         alignItems: 'center',
+        justifyContent: 'space-between',
     },
     headerText: {
         color: '#fff',
@@ -780,5 +834,54 @@ const styles = StyleSheet.create({
         color: '#1a1a1a',
         fontWeight: 'bold',
         fontSize: 14,
+    },
+    // Sidebar Styles
+    menuButton: {
+        padding: 10,
+    },
+    menuButtonText: {
+        color: '#fff',
+        fontSize: 24,
+        fontWeight: 'bold',
+    },
+    sidebarOverlay: {
+        flex: 1,
+        backgroundColor: 'rgba(0,0,0,0.5)',
+        flexDirection: 'row',
+    },
+    sidebar: {
+        width: 300,
+        backgroundColor: '#fff',
+        height: '100%',
+        padding: 20,
+        shadowColor: '#000',
+        shadowOffset: { width: 2, height: 0 },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        elevation: 5,
+    },
+    sidebarHeader: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginBottom: 30,
+        borderBottomWidth: 1,
+        borderBottomColor: '#eee',
+        paddingBottom: 15,
+    },
+    sidebarTitle: {
+        fontSize: 24,
+        fontWeight: 'bold',
+        color: '#1a1a1a',
+    },
+    sidebarItem: {
+        paddingVertical: 15,
+        borderBottomWidth: 1,
+        borderBottomColor: '#f5f5f5',
+    },
+    sidebarItemText: {
+        fontSize: 18,
+        color: '#333',
+        fontWeight: '500',
     }
 });

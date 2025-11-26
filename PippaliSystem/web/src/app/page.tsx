@@ -17,12 +17,7 @@ export default function Home() {
         >
           Order Online
         </Link>
-        <Link
-          href="/admin/menu"
-          className="bg-white text-gray-900 border border-gray-200 px-8 py-3 rounded-full font-bold text-lg hover:bg-gray-50 hover:border-gray-300 transition-all shadow-sm"
-        >
-          Admin Panel
-        </Link>
+
       </div>
     </div>
   );
