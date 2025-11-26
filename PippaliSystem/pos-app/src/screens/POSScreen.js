@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, FlatList, ScrollView, Modal, SectionList, Alert, useWindowDimensions } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { StatusBar } from 'expo-status-bar';
+import { WebView } from 'react-native-webview';
 import client from '../api/client';
 export default function POSScreen() {
     const [menuItems, setMenuItems] = useState([]);
@@ -248,14 +249,11 @@ export default function POSScreen() {
 
     // Sidebar State
     const [sidebarVisible, setSidebarVisible] = useState(false);
+    const [adminModalVisible, setAdminModalVisible] = useState(false);
 
     const handleAdminPress = () => {
         setSidebarVisible(false);
-        Alert.alert(
-            "Admin Panel",
-            "To access the Admin Panel, please visit /admin on the web dashboard.",
-            [{ text: "OK" }]
-        );
+        setAdminModalVisible(true);
     };
 
     return (
@@ -472,6 +470,26 @@ export default function POSScreen() {
                         </TouchableOpacity>
                     </View>
                 </View>
+            </Modal>
+            {/* Admin WebView Modal */}
+            <Modal
+                animationType="slide"
+                presentationStyle="pageSheet"
+                visible={adminModalVisible}
+                onRequestClose={() => setAdminModalVisible(false)}
+            >
+                <SafeAreaView style={{ flex: 1, backgroundColor: '#fff' }}>
+                    <View style={styles.modalHeader}>
+                        <Text style={styles.modalTitle}>Admin Panel</Text>
+                        <TouchableOpacity onPress={() => setAdminModalVisible(false)}>
+                            <Text style={styles.closeBtn}>Close</Text>
+                        </TouchableOpacity>
+                    </View>
+                    <WebView
+                        source={{ uri: 'http://10.0.0.161:3000/admin/menu' }}
+                        style={{ flex: 1 }}
+                    />
+                </SafeAreaView>
             </Modal>
         </SafeAreaView>
     );
