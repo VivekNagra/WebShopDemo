@@ -30,7 +30,7 @@ export default function ChatWidget() {
         setIsLoading(true);
 
         try {
-            const res = await api.post('/chat/', { message: userMessage });
+            const res = await api.post('/chat', { message: userMessage });
             setMessages(prev => [...prev, { role: 'bot', text: res.data.response }]);
         } catch (error) {
             console.error(error);
@@ -73,8 +73,8 @@ export default function ChatWidget() {
                             >
                                 <div
                                     className={`max-w-[80%] p-3 rounded-2xl text-sm leading-relaxed ${msg.role === 'user'
-                                            ? 'bg-[#1a1a1a] text-white rounded-br-none'
-                                            : 'bg-white text-gray-800 shadow-sm border border-gray-100 rounded-bl-none'
+                                        ? 'bg-[#1a1a1a] text-white rounded-br-none'
+                                        : 'bg-white text-gray-800 shadow-sm border border-gray-100 rounded-bl-none'
                                         }`}
                                 >
                                     {msg.text}

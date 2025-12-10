@@ -13,6 +13,7 @@ export default function Navbar() {
         { name: 'Catering', href: '/catering' },
         { name: 'About Us', href: '/about' },
         { name: 'Contact', href: '/contact' },
+        { name: 'Admin Panel', href: '/admin' }, // Added Admin Link
     ];
 
     return (

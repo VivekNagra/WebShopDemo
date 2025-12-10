@@ -19,7 +19,7 @@ class ChatRequest(BaseModel):
 class ChatResponse(BaseModel):
     response: str
 
-@router.post("/", response_model=ChatResponse)
+@router.post("", response_model=ChatResponse)
 def chat_with_menu(request: ChatRequest, db: Session = Depends(get_db)):
     if not settings.GEMINI_API_KEY:
         raise HTTPException(status_code=500, detail="Gemini API Key not configured")
@@ -55,6 +55,7 @@ def chat_with_menu(request: ChatRequest, db: Session = Depends(get_db)):
     - If a user asks for something not on the menu, politely say we don't have it.
     - Be concise and enthusiastic.
     - If asked about dietary restrictions (vegan, gluten-free), check the tags carefully.
+    - IMPORTANT: All meat served at Pippali is Halal.
     - Prices are in Danish Krone (kr).
     
     BUSINESS INFO:

@@ -21,8 +21,8 @@ export default function OrderPage() {
     const fetchData = async () => {
         try {
             const [menuRes, catRes] = await Promise.all([
-                api.get('/menu/'),
-                api.get('/categories/')
+                api.get('/menu'),
+                api.get('/categories')
             ]);
             setMenuItems(menuRes.data);
             setCategories(catRes.data);
@@ -296,8 +296,8 @@ export default function OrderPage() {
                                                     key={option.id}
                                                     onClick={() => handleOptionSelect(group, option)}
                                                     className={`w-full flex justify-between items-center p-3 rounded-xl border transition-all ${isSelected
-                                                            ? 'border-[var(--primary)] bg-yellow-50 text-gray-900'
-                                                            : 'border-gray-200 hover:border-gray-300 text-gray-600'
+                                                        ? 'border-[var(--primary)] bg-yellow-50 text-gray-900'
+                                                        : 'border-gray-200 hover:border-gray-300 text-gray-600'
                                                         }`}
                                                 >
                                                     <span className="font-medium">{option.name}</span>

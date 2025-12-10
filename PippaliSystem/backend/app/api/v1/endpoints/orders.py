@@ -54,3 +54,78 @@ def create_order(order_in: OrderCreate, db: Session = Depends(get_db)):
 def read_orders(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     orders = db.query(Order).offset(skip).limit(limit).all()
     return orders
+
+# --- Split Bill Logic ---
+from pydantic import BaseModel
+
+class TargetSplit(BaseModel):
+    table_id: int
+    item_ids: List[int] # IDs of OrderItems to move
+
+class SplitRequest(BaseModel):
+    source_table_id: int
+    target_splits: List[TargetSplit]
+
+@router.post("/split")
+def split_order(request: SplitRequest, db: Session = Depends(get_db)):
+    # 1. Find Source Order (Active)
+    # Assuming "Active" means status is not 'COMPLETED' or 'CANCELLED'
+    # For now, just pick the latest order for the table
+    source_order = db.query(Order).filter(
+        Order.table_number == str(request.source_table_id),
+        Order.status == "PENDING" # Or whatever default status is
+    ).order_by(Order.created_at.desc()).first()
+
+    if not source_order:
+        # Try finding by ID if table_number is actually table ID? 
+        # Frontend sends table ID usually. Let's assume table_number stores ID as string for now based on previous code.
+        raise HTTPException(status_code=404, detail="No active order found for source table")
+
+    for split in request.target_splits:
+        if not split.item_ids:
+            continue
+
+        # 2. Get or Create Target Order
+        # Check if target table already has an active order
+        target_order = db.query(Order).filter(
+            Order.table_number == str(split.table_id),
+            Order.status == "PENDING"
+        ).first()
+
+        if not target_order:
+            target_order = Order(
+                type=source_order.type,
+                source=source_order.source,
+                table_number=str(split.table_id),
+                customer_name=f"Split from Table {request.source_table_id}",
+                status="PENDING"
+            )
+            db.add(target_order)
+            db.flush() # Get ID
+
+        # 3. Move Items
+        items_to_move = db.query(OrderItem).filter(
+            OrderItem.id.in_(split.item_ids),
+            OrderItem.order_id == source_order.id
+        ).all()
+
+        moved_amount = 0
+        for item in items_to_move:
+            item.order_id = target_order.id
+            moved_amount += item.total_price
+        
+        # 4. Update Totals
+        target_order.total_amount = (target_order.total_amount or 0) + moved_amount
+        source_order.total_amount -= moved_amount
+
+    db.commit()
+    
+    # 5. Cleanup Source if Empty
+    remaining_items = db.query(OrderItem).filter(OrderItem.order_id == source_order.id).count()
+    if remaining_items == 0:
+        source_order.status = "CANCELLED" # or delete?
+        # Let's mark as cancelled/split so we keep history but it's not "active"
+        source_order.notes = "Fully split to other tables"
+    
+    db.commit()
+    return {"message": "Order split successfully"}

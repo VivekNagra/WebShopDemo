@@ -7,12 +7,12 @@ from app.schemas.menu import Category as CategorySchema, CategoryCreate
 
 router = APIRouter()
 
-@router.get("/", response_model=List[CategorySchema])
+@router.get("", response_model=List[CategorySchema])
 def read_categories(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     categories = db.query(Category).order_by(Category.sort_order).offset(skip).limit(limit).all()
     return categories
 
-@router.post("/", response_model=CategorySchema)
+@router.post("", response_model=CategorySchema)
 def create_category(category: CategoryCreate, db: Session = Depends(get_db)):
     db_category = Category(**category.dict())
     db.add(db_category)

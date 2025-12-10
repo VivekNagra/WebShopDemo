@@ -8,12 +8,12 @@ from app.schemas.menu import MenuItemCreate, MenuItem as MenuItemSchema
 
 router = APIRouter()
 
-@router.get("/", response_model=List[MenuItemSchema])
+@router.get("", response_model=List[MenuItemSchema])
 def read_menu_items(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     items = db.query(MenuItem).order_by(MenuItem.category_id, MenuItem.sort_order).offset(skip).limit(limit).all()
     return items
 
-@router.post("/", response_model=MenuItemSchema)
+@router.post("", response_model=MenuItemSchema)
 def create_menu_item(item: MenuItemCreate, db: Session = Depends(get_db)):
     # Extract option_group_ids
     option_group_ids = item.option_group_ids
